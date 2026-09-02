@@ -23,7 +23,7 @@ export function Ambient({ count = 22 }: { count?: number }) {
       size: 10 + ((i * 13) % 18),
       duration: 18 + ((i * 7) % 22),
       delay: (i * 3.1) % 26,
-      kind: kinds[i % kinds.length],
+      kind: kinds[i % kinds.length]!,
     }));
   }, [count]);
 
