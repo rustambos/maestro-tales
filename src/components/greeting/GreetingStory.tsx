@@ -140,7 +140,9 @@ export function GreetingStory({
       {/* Progress rail */}
       <nav
         aria-label="sections"
-        className="fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-4 md:flex"
+        className={`fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-4 transition-opacity md:flex ${
+          started ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
       >
         {SECTIONS.map((id) => (
           <button
