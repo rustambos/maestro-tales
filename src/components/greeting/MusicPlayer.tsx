@@ -3,7 +3,7 @@ import type { Dict } from "@/lib/i18n";
 
 const VIDEO_ID = "-OquDU12Xgg";
 
-export function MusicPlayer({ t }: { t: Dict }) {
+export function MusicPlayer({ t, autoStart = false }: { t: Dict; autoStart?: boolean }) {
   const frameRef = useRef<HTMLIFrameElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -15,14 +15,24 @@ export function MusicPlayer({ t }: { t: Dict }) {
   };
 
   useEffect(() => {
+    if (autoStart) setPlaying(true);
+  }, [autoStart]);
+
+  useEffect(() => {
     if (playing) {
       post("unMute");
       post("setVolume", [45]);
       post("playVideo");
-    } else {
-      post("mute");
+      const id = window.setTimeout(() => {
+        post("unMute");
+        post("playVideo");
+      }, 800);
+      return () => window.clearTimeout(id);
     }
+    post("mute");
+    return;
   }, [playing]);
+
 
   return (
     <>

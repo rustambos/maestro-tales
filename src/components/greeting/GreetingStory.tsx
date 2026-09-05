@@ -74,6 +74,20 @@ export function GreetingStory({
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
 
   useEffect(() => {
+    if (started) return;
+    const html = document.documentElement;
+    const prevBody = document.body.style.overflow;
+    const prevHtml = html.style.overflow;
+    document.body.style.overflow = "hidden";
+    html.style.overflow = "hidden";
+    window.scrollTo(0, 0);
+    return () => {
+      document.body.style.overflow = prevBody;
+      html.style.overflow = prevHtml;
+    };
+  }, [started]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -95,8 +109,9 @@ export function GreetingStory({
   return (
     <div ref={containerRef} className="relative min-h-screen bg-background">
       <Ambient />
-      <MusicPlayer t={t} />
+      <MusicPlayer t={t} autoStart={started} />
       <PersonalizeDialog t={t} />
+
 
       {/* Language switcher */}
       <div className="fixed right-4 top-4 z-50 flex gap-1 rounded-full border border-[var(--gold)]/40 bg-card/70 p-1 backdrop-blur">
@@ -129,7 +144,9 @@ export function GreetingStory({
       {/* Progress rail */}
       <nav
         aria-label="sections"
-        className="fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-4 md:flex"
+        className={`fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-4 transition-opacity md:flex ${
+          started ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
       >
         {SECTIONS.map((id) => (
           <button
@@ -186,20 +203,82 @@ export function GreetingStory({
             ))}
           </h1>
           <p className="mt-4 text-sm text-muted-foreground sm:text-base">{t.cover.subtitle}</p>
-          <motion.button
-            type="button"
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2 + t.cover.title.length * 0.045 }}
-            onClick={() => {
-              setStarted(true);
-              scrollTo("greeting");
-            }}
-            className="animate-shimmer mt-8 rounded-full px-8 py-3 font-semibold text-[var(--ink)]"
-            style={{ background: "var(--gradient-gold)" }}
+            className="mt-10 flex justify-center"
           >
-            {t.cover.cta}
-          </motion.button>
+            <button
+              type="button"
+              onClick={() => {
+                setStarted(true);
+                window.setTimeout(() => scrollTo("greeting"), 80);
+              }}
+              className="group relative grid h-36 w-36 place-items-center rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--gold)]/50"
+            >
+              {/* glow */}
+              <motion.span
+                aria-hidden
+                animate={{ scale: [1, 1.25, 1], opacity: [0.45, 0.1, 0.45] }}
+                transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 rounded-full"
+                style={{ background: "var(--gradient-gold)", filter: "blur(18px)" }}
+              />
+              {/* rotating dashed ring */}
+              <motion.span
+                aria-hidden
+                animate={{ rotate: 360 }}
+                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-1 rounded-full border-2 border-dashed border-[var(--gold-deep)]/70"
+              />
+              <motion.span
+                aria-hidden
+                animate={{ rotate: -360 }}
+                transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-4 rounded-full border border-[var(--gold)]/60"
+              />
+              {/* wax seal */}
+              <span
+                className="relative grid h-24 w-24 place-items-center rounded-full text-center shadow-[var(--shadow-gold)] transition-transform duration-300 group-hover:scale-105 group-active:scale-95"
+                style={{
+                  background: "var(--gradient-gold)",
+                  boxShadow:
+                    "inset 0 3px 8px oklch(1 0 0 / 0.45), inset 0 -6px 14px oklch(0.36 0.055 52 / 0.45), var(--shadow-gold)",
+                }}
+              >
+                <span className="px-2 font-display text-sm font-bold leading-tight tracking-wide text-[var(--ink)]">
+                  {t.cover.cta}
+                </span>
+              </span>
+              {/* sparkles */}
+              {[0, 1, 2, 3].map((i) => (
+                <motion.span
+                  key={i}
+                  aria-hidden
+                  className="pointer-events-none absolute text-[var(--gold-deep)]"
+                  style={{
+                    left: `${[6, 86, 12, 82][i]}%`,
+                    top: `${[14, 8, 80, 76][i]}%`,
+                  }}
+                  animate={{ opacity: [0, 1, 0], scale: [0.4, 1.1, 0.4] }}
+                  transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.55 }}
+                >
+                  ✦
+                </motion.span>
+              ))}
+            </button>
+          </motion.div>
+          {!started && (
+            <motion.p
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 2.4, repeat: Infinity }}
+              className="mt-5 text-[11px] uppercase tracking-[0.3em] text-[var(--gold-deep)]"
+            >
+              ↓
+            </motion.p>
+          )}
+
           <p className="mt-6 text-[11px] tracking-wide text-muted-foreground">{t.cover.date}</p>
         </motion.div>
       </section>
@@ -370,36 +449,70 @@ function QuotesSection({ t }: { t: (typeof DICTS)[Lang] }) {
       className="relative flex min-h-screen items-center justify-center px-4 py-24"
       style={{ background: "var(--gradient-forest)" }}
     >
-      <div className="relative z-10 w-full max-w-3xl text-center">
-        <h2 className="font-display text-3xl sm:text-4xl">{t.quotes.heading}</h2>
-        <div className="mt-12 grid min-h-[9rem] place-items-center">
-          <AnimatePresence mode="wait">
-            <motion.blockquote
-              key={index}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5 }}
-              className="font-hand text-3xl leading-snug text-[var(--brown)] sm:text-4xl"
-            >
-              “<Typewriter text={items[index] ?? ""} />”
-            </motion.blockquote>
-          </AnimatePresence>
-        </div>
-        <div className="mt-10 flex justify-center gap-2">
-          {items.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setIndex(i)}
-              aria-label={`${i + 1}`}
-              className={`h-2 rounded-full transition-all ${
-                i === index ? "w-8 bg-[var(--gold-deep)]" : "w-2 bg-[var(--gold-deep)]/40"
-              }`}
+      <div className="relative z-10 w-full max-w-3xl">
+        {/* wooden frame */}
+        <div
+          className="rounded-[14px] p-3 shadow-[var(--shadow-soft)] sm:p-4"
+          style={{
+            background:
+              "linear-gradient(160deg, oklch(0.48 0.07 55), oklch(0.34 0.055 45) 45%, oklch(0.44 0.065 52))",
+          }}
+        >
+          <div className="chalkboard relative overflow-hidden rounded-md px-5 py-10 text-center sm:px-10 sm:py-14">
+            <h2 className="chalk-text font-hand text-3xl sm:text-5xl">{t.quotes.heading}</h2>
+            <div
+              aria-hidden
+              className="mx-auto mt-4 h-px w-40 opacity-50"
+              style={{ background: "oklch(0.97 0.01 100)" }}
             />
-          ))}
+            <div className="mt-10 grid min-h-[9rem] place-items-center">
+              <AnimatePresence mode="wait">
+                <motion.blockquote
+                  key={index}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.5 }}
+                  className="chalk-text font-hand text-3xl leading-snug sm:text-4xl"
+                >
+                  “<Typewriter text={items[index] ?? ""} />”
+                </motion.blockquote>
+              </AnimatePresence>
+            </div>
+            <div className="mt-10 flex justify-center gap-2">
+              {items.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  aria-label={`${i + 1}`}
+                  className={`h-2 rounded-full bg-[oklch(0.97_0.01_100)] transition-all ${
+                    i === index ? "w-8 opacity-90" : "w-2 opacity-40"
+                  }`}
+                />
+              ))}
+            </div>
+            {/* chalk dust / ledge */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-[0.12]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 20% 30%, oklch(1 0 0 / 0.6) 0 1px, transparent 2px), radial-gradient(circle at 70% 65%, oklch(1 0 0 / 0.5) 0 1px, transparent 2px), radial-gradient(circle at 45% 85%, oklch(1 0 0 / 0.4) 0 1px, transparent 2px)",
+                backgroundSize: "180px 150px, 220px 190px, 260px 210px",
+              }}
+            />
+          </div>
+          {/* chalk ledge */}
+          <div
+            className="mx-auto mt-3 h-3 w-[96%] rounded-b-md"
+            style={{
+              background: "linear-gradient(180deg, oklch(0.52 0.07 58), oklch(0.33 0.05 45))",
+            }}
+          />
         </div>
       </div>
     </section>
   );
 }
+
