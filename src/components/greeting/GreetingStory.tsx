@@ -75,11 +75,15 @@ export function GreetingStory({
 
   useEffect(() => {
     if (started) return;
-    const prev = document.body.style.overflow;
+    const html = document.documentElement;
+    const prevBody = document.body.style.overflow;
+    const prevHtml = html.style.overflow;
     document.body.style.overflow = "hidden";
+    html.style.overflow = "hidden";
     window.scrollTo(0, 0);
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevBody;
+      html.style.overflow = prevHtml;
     };
   }, [started]);
 
