@@ -197,20 +197,82 @@ export function GreetingStory({
             ))}
           </h1>
           <p className="mt-4 text-sm text-muted-foreground sm:text-base">{t.cover.subtitle}</p>
-          <motion.button
-            type="button"
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2 + t.cover.title.length * 0.045 }}
-            onClick={() => {
-              setStarted(true);
-              scrollTo("greeting");
-            }}
-            className="animate-shimmer mt-8 rounded-full px-8 py-3 font-semibold text-[var(--ink)]"
-            style={{ background: "var(--gradient-gold)" }}
+            className="mt-10 flex justify-center"
           >
-            {t.cover.cta}
-          </motion.button>
+            <button
+              type="button"
+              onClick={() => {
+                setStarted(true);
+                window.setTimeout(() => scrollTo("greeting"), 80);
+              }}
+              className="group relative grid h-36 w-36 place-items-center rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--gold)]/50"
+            >
+              {/* glow */}
+              <motion.span
+                aria-hidden
+                animate={{ scale: [1, 1.25, 1], opacity: [0.45, 0.1, 0.45] }}
+                transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 rounded-full"
+                style={{ background: "var(--gradient-gold)", filter: "blur(18px)" }}
+              />
+              {/* rotating dashed ring */}
+              <motion.span
+                aria-hidden
+                animate={{ rotate: 360 }}
+                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-1 rounded-full border-2 border-dashed border-[var(--gold-deep)]/70"
+              />
+              <motion.span
+                aria-hidden
+                animate={{ rotate: -360 }}
+                transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-4 rounded-full border border-[var(--gold)]/60"
+              />
+              {/* wax seal */}
+              <span
+                className="relative grid h-24 w-24 place-items-center rounded-full text-center shadow-[var(--shadow-gold)] transition-transform duration-300 group-hover:scale-105 group-active:scale-95"
+                style={{
+                  background: "var(--gradient-gold)",
+                  boxShadow:
+                    "inset 0 3px 8px oklch(1 0 0 / 0.45), inset 0 -6px 14px oklch(0.36 0.055 52 / 0.45), var(--shadow-gold)",
+                }}
+              >
+                <span className="px-2 font-display text-sm font-bold leading-tight tracking-wide text-[var(--ink)]">
+                  {t.cover.cta}
+                </span>
+              </span>
+              {/* sparkles */}
+              {[0, 1, 2, 3].map((i) => (
+                <motion.span
+                  key={i}
+                  aria-hidden
+                  className="pointer-events-none absolute text-[var(--gold-deep)]"
+                  style={{
+                    left: `${[6, 86, 12, 82][i]}%`,
+                    top: `${[14, 8, 80, 76][i]}%`,
+                  }}
+                  animate={{ opacity: [0, 1, 0], scale: [0.4, 1.1, 0.4] }}
+                  transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.55 }}
+                >
+                  ✦
+                </motion.span>
+              ))}
+            </button>
+          </motion.div>
+          {!started && (
+            <motion.p
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 2.4, repeat: Infinity }}
+              className="mt-5 text-[11px] uppercase tracking-[0.3em] text-[var(--gold-deep)]"
+            >
+              ↓
+            </motion.p>
+          )}
+
           <p className="mt-6 text-[11px] tracking-wide text-muted-foreground">{t.cover.date}</p>
         </motion.div>
       </section>
