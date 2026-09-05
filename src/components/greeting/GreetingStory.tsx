@@ -252,14 +252,14 @@ export function GreetingStory({
             {[memory1, memory2, memory3].map((src, i) => (
               <motion.figure
                 key={src}
-                initial={{ opacity: 0, y: 40, rotate: [-6, 4, -3][i] }}
+                initial={{ opacity: 0, y: 40, rotate: [-6, 4, -3][i] ?? 0 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: i * 0.12 }}
                 whileHover={{ rotate: 0, scale: 1.08, zIndex: 20 }}
                 whileTap={{ rotate: 0, scale: 1.08 }}
                 className="w-56 cursor-pointer bg-[var(--cream)] p-3 pb-10 shadow-[var(--shadow-soft)] sm:w-64"
-                style={{ rotate: [-6, 4, -3][i] }}
+                style={{ rotate: [-6, 4, -3][i] ?? 0 }}
               >
                 <img
                   src={src}
