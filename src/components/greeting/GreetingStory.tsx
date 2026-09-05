@@ -445,36 +445,70 @@ function QuotesSection({ t }: { t: (typeof DICTS)[Lang] }) {
       className="relative flex min-h-screen items-center justify-center px-4 py-24"
       style={{ background: "var(--gradient-forest)" }}
     >
-      <div className="relative z-10 w-full max-w-3xl text-center">
-        <h2 className="font-display text-3xl sm:text-4xl">{t.quotes.heading}</h2>
-        <div className="mt-12 grid min-h-[9rem] place-items-center">
-          <AnimatePresence mode="wait">
-            <motion.blockquote
-              key={index}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5 }}
-              className="font-hand text-3xl leading-snug text-[var(--brown)] sm:text-4xl"
-            >
-              “<Typewriter text={items[index] ?? ""} />”
-            </motion.blockquote>
-          </AnimatePresence>
-        </div>
-        <div className="mt-10 flex justify-center gap-2">
-          {items.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setIndex(i)}
-              aria-label={`${i + 1}`}
-              className={`h-2 rounded-full transition-all ${
-                i === index ? "w-8 bg-[var(--gold-deep)]" : "w-2 bg-[var(--gold-deep)]/40"
-              }`}
+      <div className="relative z-10 w-full max-w-3xl">
+        {/* wooden frame */}
+        <div
+          className="rounded-[14px] p-3 shadow-[var(--shadow-soft)] sm:p-4"
+          style={{
+            background:
+              "linear-gradient(160deg, oklch(0.48 0.07 55), oklch(0.34 0.055 45) 45%, oklch(0.44 0.065 52))",
+          }}
+        >
+          <div className="chalkboard relative overflow-hidden rounded-md px-5 py-10 text-center sm:px-10 sm:py-14">
+            <h2 className="chalk-text font-hand text-3xl sm:text-5xl">{t.quotes.heading}</h2>
+            <div
+              aria-hidden
+              className="mx-auto mt-4 h-px w-40 opacity-50"
+              style={{ background: "oklch(0.97 0.01 100)" }}
             />
-          ))}
+            <div className="mt-10 grid min-h-[9rem] place-items-center">
+              <AnimatePresence mode="wait">
+                <motion.blockquote
+                  key={index}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.5 }}
+                  className="chalk-text font-hand text-3xl leading-snug sm:text-4xl"
+                >
+                  “<Typewriter text={items[index] ?? ""} />”
+                </motion.blockquote>
+              </AnimatePresence>
+            </div>
+            <div className="mt-10 flex justify-center gap-2">
+              {items.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  aria-label={`${i + 1}`}
+                  className={`h-2 rounded-full bg-[oklch(0.97_0.01_100)] transition-all ${
+                    i === index ? "w-8 opacity-90" : "w-2 opacity-40"
+                  }`}
+                />
+              ))}
+            </div>
+            {/* chalk dust / ledge */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-[0.12]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 20% 30%, oklch(1 0 0 / 0.6) 0 1px, transparent 2px), radial-gradient(circle at 70% 65%, oklch(1 0 0 / 0.5) 0 1px, transparent 2px), radial-gradient(circle at 45% 85%, oklch(1 0 0 / 0.4) 0 1px, transparent 2px)",
+                backgroundSize: "180px 150px, 220px 190px, 260px 210px",
+              }}
+            />
+          </div>
+          {/* chalk ledge */}
+          <div
+            className="mx-auto mt-3 h-3 w-[96%] rounded-b-md"
+            style={{
+              background: "linear-gradient(180deg, oklch(0.52 0.07 58), oklch(0.33 0.05 45))",
+            }}
+          />
         </div>
       </div>
     </section>
   );
 }
+
