@@ -83,26 +83,116 @@ export function GiftBox({
             key="box"
             type="button"
             onClick={() => setOpened(true)}
-            exit={{ scale: 0.7, opacity: 0 }}
-            animate={{ scale: [1, 1.04, 1] }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+            exit={{ scale: 0.6, opacity: 0, y: 40 }}
             aria-label={t.gift.open}
-            className="animate-shimmer relative h-52 w-52 rounded-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--gold)]/50 sm:h-64 sm:w-64"
-            style={{ background: "var(--gradient-gold)" }}
+            className="group relative h-64 w-64 focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--gold)]/50 sm:h-72 sm:w-72"
+            style={{ perspective: 900 }}
           >
-            <span
-              className="absolute inset-x-0 top-0 h-14 rounded-t-2xl border-b-2 border-[var(--cream)]/40 sm:h-16"
-              style={{ background: "var(--gradient-gold)" }}
-            />
-            <span className="absolute inset-y-0 left-1/2 w-6 -translate-x-1/2 bg-[var(--forest)]/80" />
-            <span className="absolute inset-x-0 top-14 h-6 bg-[var(--forest)]/80 sm:top-16" />
-            <span className="absolute left-1/2 top-3 -translate-x-1/2 text-4xl">🎀</span>
-            <span className="absolute bottom-4 left-0 right-0 text-sm font-semibold tracking-wide text-[var(--ink)]">
+            <motion.span
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 block"
+            >
+              {/* floor shadow */}
+              <span
+                aria-hidden
+                className="absolute bottom-1 left-1/2 h-5 w-44 -translate-x-1/2 rounded-[50%] blur-md"
+                style={{ background: "oklch(0.26 0.04 55 / 0.45)" }}
+              />
+
+              {/* box body */}
+              <span
+                aria-hidden
+                className="absolute bottom-6 left-1/2 h-36 w-52 -translate-x-1/2 rounded-b-[6px] rounded-t-[3px]"
+                style={{
+                  background:
+                    "linear-gradient(100deg, oklch(0.40 0.075 25) 0%, oklch(0.52 0.10 28) 22%, oklch(0.60 0.11 30) 48%, oklch(0.45 0.085 26) 78%, oklch(0.34 0.06 24) 100%)",
+                  boxShadow:
+                    "inset 0 -18px 26px oklch(0.2 0.04 25 / 0.55), inset 0 8px 14px oklch(1 0 0 / 0.12), 0 22px 34px -18px oklch(0.26 0.04 55 / 0.7)",
+                }}
+              />
+              {/* vertical ribbon on body */}
+              <span
+                aria-hidden
+                className="absolute bottom-6 left-1/2 h-36 w-9 -translate-x-1/2"
+                style={{
+                  background:
+                    "linear-gradient(90deg, oklch(0.55 0.09 85) 0%, oklch(0.86 0.13 88) 40%, oklch(0.74 0.12 82) 60%, oklch(0.5 0.085 78) 100%)",
+                  boxShadow: "0 0 10px oklch(0.74 0.12 82 / 0.5)",
+                }}
+              />
+
+              {/* lid */}
+              <motion.span
+                aria-hidden
+                className="absolute left-1/2 top-[62px] block h-12 w-60 origin-bottom -translate-x-1/2 rounded-[5px]"
+                animate={{ rotate: [0, -3, 0, 2, 0] }}
+                transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
+                style={{
+                  background:
+                    "linear-gradient(100deg, oklch(0.44 0.08 25) 0%, oklch(0.58 0.105 28) 25%, oklch(0.66 0.115 30) 50%, oklch(0.48 0.09 26) 80%, oklch(0.36 0.065 24) 100%)",
+                  boxShadow:
+                    "inset 0 -10px 16px oklch(0.2 0.04 25 / 0.5), inset 0 6px 10px oklch(1 0 0 / 0.18), 0 12px 20px -10px oklch(0.26 0.04 55 / 0.6)",
+                }}
+              />
+              {/* ribbon over lid */}
+              <span
+                aria-hidden
+                className="absolute left-1/2 top-[62px] h-12 w-9 -translate-x-1/2"
+                style={{
+                  background:
+                    "linear-gradient(90deg, oklch(0.55 0.09 85) 0%, oklch(0.88 0.13 88) 40%, oklch(0.74 0.12 82) 60%, oklch(0.5 0.085 78) 100%)",
+                }}
+              />
+
+              {/* bow loops */}
+              <span
+                aria-hidden
+                className="absolute left-1/2 top-[26px] h-10 w-16 -translate-x-[105%] -rotate-[28deg] rounded-[100%_0_100%_60%]"
+                style={{
+                  background: "linear-gradient(140deg, oklch(0.88 0.13 88), oklch(0.6 0.1 78))",
+                  boxShadow: "inset 0 -6px 10px oklch(0.4 0.07 70 / 0.5)",
+                }}
+              />
+              <span
+                aria-hidden
+                className="absolute left-1/2 top-[26px] h-10 w-16 translate-x-[5%] rotate-[28deg] rounded-[0_100%_60%_100%]"
+                style={{
+                  background: "linear-gradient(220deg, oklch(0.88 0.13 88), oklch(0.6 0.1 78))",
+                  boxShadow: "inset 0 -6px 10px oklch(0.4 0.07 70 / 0.5)",
+                }}
+              />
+              {/* bow knot */}
+              <span
+                aria-hidden
+                className="absolute left-1/2 top-[50px] h-6 w-6 -translate-x-1/2 rounded-full"
+                style={{
+                  background: "radial-gradient(circle at 35% 30%, oklch(0.93 0.1 90), oklch(0.6 0.1 78))",
+                  boxShadow: "0 4px 8px oklch(0.3 0.05 60 / 0.5)",
+                }}
+              />
+
+              {/* sheen */}
+              <motion.span
+                aria-hidden
+                className="absolute bottom-6 left-1/2 h-36 w-52 -translate-x-1/2 overflow-hidden rounded-[6px]"
+              >
+                <motion.span
+                  className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-12"
+                  style={{ background: "linear-gradient(90deg, transparent, oklch(1 0 0 / 0.3), transparent)" }}
+                  animate={{ x: ["0%", "420%"] }}
+                  transition={{ duration: 3.2, repeat: Infinity, repeatDelay: 1.6, ease: "easeInOut" }}
+                />
+              </motion.span>
+            </motion.span>
+
+            <span className="absolute bottom-[-6px] left-0 right-0 text-sm font-semibold tracking-wide text-[var(--ink)]">
               {t.gift.open}
             </span>
           </motion.button>
         )}
       </AnimatePresence>
+
 
       <Confetti show={opened} />
 
