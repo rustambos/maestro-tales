@@ -74,6 +74,16 @@ export function GreetingStory({
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
 
   useEffect(() => {
+    if (started) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.scrollTo(0, 0);
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [started]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -95,8 +105,9 @@ export function GreetingStory({
   return (
     <div ref={containerRef} className="relative min-h-screen bg-background">
       <Ambient />
-      <MusicPlayer t={t} />
+      <MusicPlayer t={t} autoStart={started} />
       <PersonalizeDialog t={t} />
+
 
       {/* Language switcher */}
       <div className="fixed right-4 top-4 z-50 flex gap-1 rounded-full border border-[var(--gold)]/40 bg-card/70 p-1 backdrop-blur">
