@@ -48,6 +48,10 @@ export type Dict = {
     error: string;
     open: string;
     cancel: string;
+    passwordTitle: string;
+    passwordPh: string;
+    passwordError: string;
+    passwordSubmit: string;
   };
   music: { on: string; off: string };
   defaults: { recipient: string; sender: string };
@@ -126,6 +130,10 @@ export const DICTS: Record<Lang, Dict> = {
       error: "Xatolik yuz berdi. Qaytadan urinib ko'ring.",
       open: "Ochish",
       cancel: "Yopish",
+      passwordTitle: "Tahrirlay olish uchun parolni kiriting",
+      passwordPh: "Parol",
+      passwordError: "Parol noto'g'ri. Qaytadan urinib ko'ring.",
+      passwordSubmit: "Kirish",
     },
     music: { on: "Musiqa yoqilgan", off: "Musiqa o'chirilgan" },
     defaults: { recipient: "Qadrli ustozimiz", sender: "WebInvite jamoasi" },
@@ -202,6 +210,10 @@ export const DICTS: Record<Lang, Dict> = {
       error: "Произошла ошибка. Попробуйте ещё раз.",
       open: "Открыть",
       cancel: "Закрыть",
+      passwordTitle: "Введите пароль для редактирования",
+      passwordPh: "Пароль",
+      passwordError: "Неверный пароль. Попробуйте ещё раз.",
+      passwordSubmit: "Войти",
     },
     music: { on: "Музыка включена", off: "Музыка выключена" },
     defaults: { recipient: "Наш дорогой учитель", sender: "Команда WebInvite" },
@@ -278,6 +290,10 @@ export const DICTS: Record<Lang, Dict> = {
       error: "Something went wrong. Please try again.",
       open: "Open",
       cancel: "Close",
+      passwordTitle: "Enter the password to edit",
+      passwordPh: "Password",
+      passwordError: "Incorrect password. Please try again.",
+      passwordSubmit: "Enter",
     },
     music: { on: "Music on", off: "Music off" },
     defaults: { recipient: "Our dear teacher", sender: "The WebInvite team" },
