@@ -189,7 +189,7 @@ export function GreetingStory({
           className="relative z-10 mx-4 max-w-2xl rounded-2xl px-6 py-12 text-center glass-card"
         >
           <p className="text-xs uppercase tracking-[0.4em] text-[var(--gold-deep)]">{t.cover.kicker}</p>
-          <h1 className="mt-4 font-display text-4xl leading-tight sm:text-6xl">
+          <h1 className="text-gilded mt-4 font-display text-[1.55rem] leading-snug font-semibold sm:text-5xl md:text-6xl">
             {t.cover.title.split("").map((ch, i) => (
               <motion.span
                 key={i}
