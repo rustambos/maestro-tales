@@ -199,7 +199,9 @@ export function PersonalizeDialog({ t }: { t: Dict }) {
                       {t.personalize.open}
                     </a>
                   </div>
-                </div>
+                 </div>
+               )}
+                </>
               )}
             </motion.div>
           </motion.div>
