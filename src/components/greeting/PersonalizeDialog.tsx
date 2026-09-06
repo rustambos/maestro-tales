@@ -55,7 +55,7 @@ export function PersonalizeDialog({ t }: { t: Dict }) {
         title={t.personalize.title}
         className="fixed bottom-5 right-5 z-50 grid h-12 w-12 place-items-center rounded-full border border-gold/50 bg-card/80 text-lg shadow-[var(--shadow-soft)] backdrop-blur transition-transform hover:scale-110"
       >
-        ✏️
+        🔑
       </button>
 
       <AnimatePresence>
@@ -77,6 +77,56 @@ export function PersonalizeDialog({ t }: { t: Dict }) {
               aria-modal="true"
               aria-label={t.personalize.title}
             >
+              {!unlocked ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (password.trim() === EDIT_PASSWORD) {
+                      setUnlocked(true);
+                      setPasswordError(false);
+                    } else {
+                      setPasswordError(true);
+                    }
+                  }}
+                  className="mt-5 space-y-4"
+                >
+                  <h3 className="font-display text-2xl">{t.personalize.passwordTitle}</h3>
+                  <label className="block text-sm font-medium">
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        setPasswordError(false);
+                      }}
+                      placeholder={t.personalize.passwordPh}
+                      autoFocus
+                      required
+                      className="mt-1 w-full rounded-lg border border-input bg-background/70 px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[var(--gold)]"
+                    />
+                  </label>
+                  {passwordError && (
+                    <p className="text-sm text-destructive">{t.personalize.passwordError}</p>
+                  )}
+                  <div className="flex gap-3 pt-1">
+                    <button
+                      type="submit"
+                      className="flex-1 rounded-full px-5 py-2.5 text-sm font-semibold text-[var(--ink)]"
+                      style={{ background: "var(--gradient-gold)" }}
+                    >
+                      {t.personalize.passwordSubmit}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setOpen(false)}
+                      className="rounded-full border border-border px-5 py-2.5 text-sm"
+                    >
+                      {t.personalize.cancel}
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
               <h3 className="font-display text-2xl">{t.personalize.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{t.personalize.subtitle}</p>
 
