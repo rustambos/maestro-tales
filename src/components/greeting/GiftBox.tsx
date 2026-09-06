@@ -247,12 +247,16 @@ export function GiftBox({
               </button>
 
               <div className="mt-8 flex flex-col items-center gap-2">
-                <div
-                  className="grid h-20 w-20 place-items-center rounded-full border-4 text-lg font-bold"
+                <a
+                  href="https://webinvite-six.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WebInvite"
+                  className="grid h-20 w-20 place-items-center rounded-full border-4 text-lg font-bold transition-transform hover:scale-105"
                   style={{ borderColor: "var(--gold-deep)", color: "var(--gold-deep)" }}
                 >
                   WI
-                </div>
+                </a>
                 <p className="font-hand text-xl text-[var(--brown)]">{t.gift.from(sender)}</p>
               </div>
             </div>
