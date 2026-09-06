@@ -13,8 +13,13 @@ function makeSlug(name: string) {
   return `${base || "ustoz"}-${rand}`;
 }
 
+const EDIT_PASSWORD = "131700";
+
 export function PersonalizeDialog({ t }: { t: Dict }) {
   const [open, setOpen] = useState(false);
+  const [unlocked, setUnlocked] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
   const [recipient, setRecipient] = useState("");
   const [sender, setSender] = useState("");
   const [saving, setSaving] = useState(false);
