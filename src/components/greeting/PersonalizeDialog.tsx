@@ -15,8 +15,15 @@ function makeSlug(name: string) {
 
 const EDIT_PASSWORD = "131700";
 
-export function PersonalizeDialog({ t }: { t: Dict }) {
-  const [open, setOpen] = useState(false);
+export function PersonalizeDialog({
+  t,
+  open,
+  onOpenChange,
+}: {
+  t: Dict;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const [unlocked, setUnlocked] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
@@ -48,16 +55,6 @@ export function PersonalizeDialog({ t }: { t: Dict }) {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label={t.personalize.title}
-        title={t.personalize.title}
-        className="fixed bottom-5 right-5 z-50 grid h-12 w-12 place-items-center rounded-full border border-gold/50 bg-card/80 text-lg shadow-[var(--shadow-soft)] backdrop-blur transition-transform hover:scale-110"
-      >
-        🔑
-      </button>
-
       <AnimatePresence>
         {open && (
           <motion.div
@@ -65,7 +62,7 @@ export function PersonalizeDialog({ t }: { t: Dict }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[60] grid place-items-center bg-[var(--ink)]/50 p-4 backdrop-blur-sm"
-            onClick={() => setOpen(false)}
+            onClick={() => onOpenChange(false)}
           >
             <motion.div
               initial={{ scale: 0.92, y: 20 }}
@@ -118,7 +115,7 @@ export function PersonalizeDialog({ t }: { t: Dict }) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setOpen(false)}
+                      onClick={() => onOpenChange(false)}
                       className="rounded-full border border-border px-5 py-2.5 text-sm"
                     >
                       {t.personalize.cancel}
@@ -166,7 +163,7 @@ export function PersonalizeDialog({ t }: { t: Dict }) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setOpen(false)}
+                      onClick={() => onOpenChange(false)}
                       className="rounded-full border border-border px-5 py-2.5 text-sm"
                     >
                       {t.personalize.cancel}

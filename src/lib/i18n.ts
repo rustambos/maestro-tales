@@ -54,6 +54,7 @@ export type Dict = {
     passwordSubmit: string;
   };
   music: { on: string; off: string };
+  footer: { website: string; telegram: string; admin: string };
   defaults: { recipient: string; sender: string };
 };
 
@@ -136,6 +137,7 @@ export const DICTS: Record<Lang, Dict> = {
       passwordSubmit: "Kirish",
     },
     music: { on: "Musiqa yoqilgan", off: "Musiqa o'chirilgan" },
+    footer: { website: "Saytimiz", telegram: "Telegram kanalimiz", admin: "Admin kirish" },
     defaults: { recipient: "Qadrli ustozimiz", sender: "WebInvite jamoasi" },
   },
   ru: {
@@ -216,6 +218,7 @@ export const DICTS: Record<Lang, Dict> = {
       passwordSubmit: "Войти",
     },
     music: { on: "Музыка включена", off: "Музыка выключена" },
+    footer: { website: "Наш сайт", telegram: "Telegram-канал", admin: "Вход для администратора" },
     defaults: { recipient: "Наш дорогой учитель", sender: "Команда WebInvite" },
   },
   en: {
@@ -296,6 +299,7 @@ export const DICTS: Record<Lang, Dict> = {
       passwordSubmit: "Enter",
     },
     music: { on: "Music on", off: "Music off" },
+    footer: { website: "Our website", telegram: "Telegram channel", admin: "Admin login" },
     defaults: { recipient: "Our dear teacher", sender: "The WebInvite team" },
   },
 };
