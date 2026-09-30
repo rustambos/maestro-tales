@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { KeyRound, Send } from "lucide-react";
 import cover from "@/assets/cover.jpg";
 import memory1 from "@/assets/memory1.jpg";
 import memory2 from "@/assets/memory2.jpg";
@@ -9,6 +10,7 @@ import { Ambient, ChalkDivider } from "./Ambient";
 import { GiftBox } from "./GiftBox";
 import { MusicPlayer } from "./MusicPlayer";
 import { PersonalizeDialog } from "./PersonalizeDialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const SECTIONS = ["intro", "greeting", "value", "memories", "quotes", "gift"] as const;
 type SectionId = (typeof SECTIONS)[number];
@@ -64,6 +66,8 @@ export function GreetingStory({
   const t = DICTS[lang];
   const [started, setStarted] = useState(false);
   const [active, setActive] = useState<SectionId>("intro");
+  const [adminOpen, setAdminOpen] = useState(false);
+  const isMobile = useIsMobile();
   const mouse = useMousePosition();
 
   const displayRecipient = recipient?.trim() || t.defaults.recipient;
@@ -107,10 +111,10 @@ export function GreetingStory({
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-background">
+    <div ref={containerRef} className="relative min-h-screen w-full overflow-x-clip bg-background">
       <Ambient />
       <MusicPlayer t={t} autoStart={started} />
-      <PersonalizeDialog t={t} />
+      <PersonalizeDialog t={t} open={adminOpen} onOpenChange={setAdminOpen} />
 
 
       {/* Language switcher */}
@@ -129,17 +133,6 @@ export function GreetingStory({
           </button>
         ))}
       </div>
-
-      {/* WI button */}
-      <a
-        href="https://webinvite-six.vercel.app"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="WebInvite"
-        className="fixed bottom-5 right-20 z-50 grid h-12 w-12 place-items-center rounded-full border border-[var(--gold)]/60 bg-card/80 font-display text-sm font-bold tracking-wider text-[var(--gold-deep)] shadow-[var(--shadow-soft)] backdrop-blur transition-transform hover:scale-110"
-      >
-        WI
-      </a>
 
       {/* Progress rail */}
       <nav
@@ -177,7 +170,7 @@ export function GreetingStory({
           alt=""
           width={1920}
           height={1088}
-          style={{ y: bgY, x: mouse.x * -14 }}
+          style={{ y: bgY, x: isMobile ? 0 : mouse.x * -14 }}
           className="absolute inset-0 h-full w-full scale-110 object-cover"
         />
         <div className="absolute inset-0 bg-[var(--cream)]/45" />
@@ -185,8 +178,8 @@ export function GreetingStory({
           initial={{ rotateX: 85, opacity: 0 }}
           animate={{ rotateX: 0, opacity: 1 }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          style={{ perspective: 1000, x: mouse.x * 10, y: mouse.y * 8 }}
-          className="relative z-10 mx-4 max-w-2xl rounded-2xl px-6 py-12 text-center glass-card"
+          style={{ perspective: 1000, x: isMobile ? 0 : mouse.x * 10, y: isMobile ? 0 : mouse.y * 8 }}
+          className="glass-card relative z-10 mx-auto w-[calc(100%-2rem)] max-w-2xl rounded-2xl px-5 py-10 text-center sm:px-6 sm:py-12"
         >
           <p className="text-xs uppercase tracking-[0.4em] text-[var(--gold-deep)]">{t.cover.kicker}</p>
           <h1 className="text-gilded mt-4 font-display text-[1.55rem] leading-snug font-semibold sm:text-5xl md:text-6xl">
@@ -296,8 +289,8 @@ export function GreetingStory({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8 }}
-          style={{ x: mouse.x * 6, y: mouse.y * 6 }}
-          className="glass-card relative z-10 max-w-2xl rounded-3xl p-8 text-center sm:p-12"
+           style={{ x: isMobile ? 0 : mouse.x * 6, y: isMobile ? 0 : mouse.y * 6 }}
+           className="glass-card relative z-10 mx-auto w-full max-w-2xl rounded-3xl p-8 text-center sm:p-12"
         >
           <div
             aria-hidden
@@ -377,8 +370,39 @@ export function GreetingStory({
         <div className="relative z-10 w-full max-w-2xl">
           <GiftBox t={t} recipient={displayRecipient} sender={displaySender} />
         </div>
-        <footer className="relative z-10 pt-10 text-xs text-muted-foreground">
-          {t.brand} · {t.cover.date}
+        <footer className="relative z-10 mx-auto w-full max-w-2xl pt-10 text-muted-foreground">
+          <div className="grid grid-cols-3 gap-3 border-t border-[var(--gold)]/35 pt-7 sm:gap-8">
+            <a
+              href="https://webinvite-six.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex min-w-0 flex-col items-center gap-2 text-center text-[11px] transition-colors hover:text-[var(--gold-deep)] sm:text-xs"
+              aria-label={t.footer.website}
+            >
+              <span className="font-display text-xl font-bold text-[var(--gold-deep)] transition-transform group-hover:-translate-y-1">WI</span>
+              <span className="leading-tight">{t.footer.website}</span>
+            </a>
+            <a
+              href="https://t.me/webinvite_uz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex min-w-0 flex-col items-center gap-2 text-center text-[11px] transition-colors hover:text-[var(--gold-deep)] sm:text-xs"
+              aria-label={t.footer.telegram}
+            >
+              <Send aria-hidden className="h-6 w-6 text-[var(--gold-deep)] transition-transform group-hover:-translate-y-1" strokeWidth={1.6} />
+              <span className="leading-tight">{t.footer.telegram}</span>
+            </a>
+            <button
+              type="button"
+              onClick={() => setAdminOpen(true)}
+              className="group flex min-w-0 flex-col items-center gap-2 text-center text-[11px] transition-colors hover:text-[var(--gold-deep)] sm:text-xs"
+              aria-label={t.footer.admin}
+            >
+              <KeyRound aria-hidden className="h-6 w-6 text-[var(--gold-deep)] transition-transform group-hover:-translate-y-1" strokeWidth={1.6} />
+              <span className="leading-tight">{t.footer.admin}</span>
+            </button>
+          </div>
+          <p className="pt-8 text-center text-[11px]">{t.brand} · {t.cover.date}</p>
         </footer>
       </section>
 
